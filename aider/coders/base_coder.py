@@ -155,7 +155,7 @@ class Coder:
         if use_git:
             self.set_repo(fnames)
         else:
-            self.abs_fnames = [str(Path(fname).resolve()) for fname in fnames]
+            self.abs_fnames = set([str(Path(fname).resolve()) for fname in fnames])
 
         if self.repo:
             rel_repo_dir = os.path.relpath(self.repo.git_dir, os.getcwd())
@@ -178,7 +178,8 @@ class Coder:
                 self.io.tool_output(f"Repo-map: universal-ctags using {map_tokens} tokens")
             elif not self.repo_map.has_ctags and map_tokens > 0:
                 self.io.tool_output(
-                    f"Repo-map: basic using {map_tokens} tokens (universal-ctags not found)"
+                    f"Repo-map: basic using {map_tokens} tokens"
+                    f" ({self.repo_map.ctags_disabled_reason})"
                 )
             else:
                 self.io.tool_output("Repo-map: disabled because map_tokens == 0")
